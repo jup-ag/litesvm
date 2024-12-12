@@ -1,11 +1,12 @@
+use ethnum::U256;
 use litesvm::{types::FailedTransactionMetadata, LiteSVM};
 use smallvec::{smallvec, SmallVec};
+use solana_sdk::instruction::Instruction;
 use solana_sdk::{
     pubkey::Pubkey, signature::Keypair, signer::Signer, signers::Signers, transaction::Transaction,
 };
 
 use super::get_multisig_signers;
-#[cfg_attr(feature = "token-2022", allow(deprecated))]
 use super::{spl_token::instruction::transfer, TOKEN_ID};
 
 /// ### Description
@@ -22,7 +23,7 @@ pub struct Transfer<'a> {
     source: Option<&'a Pubkey>,
     destination: &'a Pubkey,
     token_program_id: Option<&'a Pubkey>,
-    amount: u64,
+    amount: U256,
     signers: SmallVec<[&'a Keypair; 1]>,
     owner: Option<Pubkey>,
 }
@@ -34,7 +35,7 @@ impl<'a> Transfer<'a> {
         payer: &'a Keypair,
         mint: &'a Pubkey,
         destination: &'a Pubkey,
-        amount: u64,
+        amount: U256,
     ) -> Self {
         Transfer {
             svm,
@@ -94,8 +95,7 @@ impl<'a> Transfer<'a> {
             )
         };
 
-        #[cfg_attr(feature = "token-2022", allow(deprecated))]
-        let ix = transfer(
+        let ix: Instruction = transfer(
             token_program_id,
             &source_pk,
             self.destination,

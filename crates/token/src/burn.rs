@@ -1,3 +1,4 @@
+use ethnum::U256;
 use litesvm::{types::FailedTransactionMetadata, LiteSVM};
 use smallvec::{smallvec, SmallVec};
 use solana_sdk::{
@@ -18,7 +19,7 @@ pub struct Burn<'a> {
     mint: &'a Pubkey,
     account: &'a Pubkey,
     token_program_id: Option<&'a Pubkey>,
-    amount: u64,
+    amount: U256,
     signers: SmallVec<[&'a Keypair; 1]>,
     owner: Option<Pubkey>,
 }
@@ -30,7 +31,7 @@ impl<'a> Burn<'a> {
         payer: &'a Keypair,
         mint: &'a Pubkey,
         account: &'a Pubkey,
-        amount: u64,
+        amount: U256,
     ) -> Self {
         Burn {
             svm,

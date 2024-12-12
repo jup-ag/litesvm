@@ -1,12 +1,9 @@
+use jpl_token_2022::extension::ExtensionType;
 use litesvm::{types::FailedTransactionMetadata, LiteSVM};
-#[cfg(not(feature = "token-2022"))]
-use solana_sdk::program_pack::Pack;
 use solana_sdk::{
-    pubkey::Pubkey, signature::Keypair, signer::Signer, system_instruction,
+    program_pack::Pack, pubkey::Pubkey, signature::Keypair, signer::Signer, system_instruction,
     transaction::Transaction,
 };
-#[cfg(feature = "token-2022")]
-use spl_token_2022::extension::ExtensionType;
 
 use super::{
     spl_token::{instruction::initialize_account3, state::Account},
@@ -26,7 +23,6 @@ pub struct CreateAccount<'a> {
     owner: Option<&'a Pubkey>,
     account_kp: Option<Keypair>,
     token_program_id: Option<&'a Pubkey>,
-    #[cfg(feature = "token-2022")]
     extensions: Vec<ExtensionType>,
 }
 
@@ -40,7 +36,6 @@ impl<'a> CreateAccount<'a> {
             owner: None,
             account_kp: None,
             token_program_id: None,
-            #[cfg(feature = "token-2022")]
             extensions: vec![],
         }
     }
@@ -65,9 +60,7 @@ impl<'a> CreateAccount<'a> {
 
     /// Sends the transaction.
     pub fn send(self) -> Result<Pubkey, FailedTransactionMetadata> {
-        #[cfg(feature = "token-2022")]
         let account_len = ExtensionType::try_calculate_account_len::<Account>(&self.extensions)?;
-        #[cfg(not(feature = "token-2022"))]
         let account_len = Account::LEN;
 
         let lamports = self.svm.minimum_balance_for_rent_exemption(account_len);

@@ -1,6 +1,6 @@
+use jpl_token_2022::instruction::create_native_mint;
 use litesvm::{types::FailedTransactionMetadata, LiteSVM};
 use solana_sdk::{pubkey::Pubkey, signature::Keypair, signer::Signer, transaction::Transaction};
-use spl_token_2022::instruction::create_native_mint;
 
 /// ### Description
 /// Builder for the [`create_native_mint`] instruction.
@@ -28,7 +28,7 @@ impl<'a> CreateNativeMint<'a> {
 
     /// Sends the transaction.
     pub fn send(self) -> Result<(), FailedTransactionMetadata> {
-        let token_program_id = self.token_program_id.unwrap_or(&spl_token_2022::ID);
+        let token_program_id = self.token_program_id.unwrap_or(&jpl_token_2022::ID);
         let payer_pk = self.payer.pubkey();
 
         let ix = create_native_mint(token_program_id, &payer_pk)?;

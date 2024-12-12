@@ -1,4 +1,5 @@
 use super::{get_multisig_signers, spl_token::instruction::mint_to, TOKEN_ID};
+use ethnum::U256;
 use litesvm::{types::FailedTransactionMetadata, LiteSVM};
 use smallvec::{smallvec, SmallVec};
 use solana_sdk::{
@@ -19,7 +20,7 @@ pub struct MintTo<'a> {
     token_program_id: Option<&'a Pubkey>,
     owner: Option<Pubkey>,
     signers: SmallVec<[&'a Keypair; 1]>,
-    amount: u64,
+    amount: U256,
 }
 
 impl<'a> MintTo<'a> {
@@ -29,7 +30,7 @@ impl<'a> MintTo<'a> {
         payer: &'a Keypair,
         mint: &'a Pubkey,
         destination: &'a Pubkey,
-        amount: u64,
+        amount: U256,
     ) -> Self {
         MintTo {
             svm,

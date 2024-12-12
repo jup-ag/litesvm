@@ -8,8 +8,8 @@ pub fn load_spl_programs(svm: &mut LiteSVM) {
         include_bytes!("programs/spl_token-3.5.0.so"),
     );
     svm.add_program(
-        pubkey!("TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"),
-        include_bytes!("programs/spl_token_2022-1.0.0.so"),
+        pubkey!("tokenDf1t37u66kgCLC7uHzPXn7s3haCL3twEMkhQyS"),
+        include_bytes!("programs/jpl_token_2022-1.0.0.so"),
     );
     svm.add_program(
         pubkey!("Memo1UhkJRfHyvLMcVucJwxXeuD728EqVDDwQDxFMNo"),

@@ -8,7 +8,6 @@ mod create_ata;
 mod create_ata_idempotent;
 mod create_mint;
 mod create_multisig;
-#[cfg(feature = "token-2022")]
 mod create_native_mint;
 mod freeze_account;
 mod mint_to;
@@ -30,7 +29,6 @@ pub use create_ata::*;
 pub use create_ata_idempotent::*;
 pub use create_mint::*;
 pub use create_multisig::*;
-#[cfg(feature = "token-2022")]
 pub use create_native_mint::*;
 pub use freeze_account::*;
 pub use mint_to::*;
@@ -42,11 +40,7 @@ pub use thaw_account::*;
 pub use transfer::*;
 pub use transfer_checked::*;
 
-#[cfg(feature = "token-2022")]
-pub use spl_token_2022 as spl_token;
-
-#[cfg(not(feature = "token-2022"))]
-pub use spl_token;
+pub use jpl_token_2022 as spl_token;
 
 use litesvm::{types::FailedTransactionMetadata, LiteSVM};
 use solana_sdk::{

@@ -1,3 +1,4 @@
+use ethnum::U256;
 use litesvm::{types::FailedTransactionMetadata, LiteSVM};
 use smallvec::{smallvec, SmallVec};
 use solana_sdk::{
@@ -24,7 +25,7 @@ pub struct TransferChecked<'a> {
     source: Option<&'a Pubkey>,
     destination: &'a Pubkey,
     token_program_id: Option<&'a Pubkey>,
-    amount: u64,
+    amount: U256,
     decimals: Option<u8>,
     signers: SmallVec<[&'a Keypair; 1]>,
     owner: Option<Pubkey>,
@@ -37,7 +38,7 @@ impl<'a> TransferChecked<'a> {
         payer: &'a Keypair,
         mint: &'a Pubkey,
         destination: &'a Pubkey,
-        amount: u64,
+        amount: U256,
     ) -> Self {
         TransferChecked {
             svm,

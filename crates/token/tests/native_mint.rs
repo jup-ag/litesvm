@@ -16,7 +16,7 @@ fn test() {
 
     CreateNativeMint::new(svm, &payer_kp).send().unwrap();
 
-    let mint: Mint = get_spl_account(svm, &spl_token_2022::native_mint::ID).unwrap();
+    let mint: Mint = get_spl_account(svm, &jpl_token_2022::native_mint::ID).unwrap();
 
     assert_eq!(mint.decimals, 9);
     assert_eq!(mint.supply, 0);
@@ -25,7 +25,7 @@ fn test() {
     assert_eq!(mint.freeze_authority, None.into());
 
     let account_pk =
-        CreateAssociatedTokenAccount::new(svm, &payer_kp, &spl_token_2022::native_mint::ID)
+        CreateAssociatedTokenAccount::new(svm, &payer_kp, &jpl_token_2022::native_mint::ID)
             .send()
             .unwrap();
 

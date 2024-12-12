@@ -1,3 +1,4 @@
+use ethnum::U256;
 use litesvm::{types::FailedTransactionMetadata, LiteSVM};
 use smallvec::{smallvec, SmallVec};
 use solana_sdk::{
@@ -23,7 +24,7 @@ pub struct ApproveChecked<'a> {
     delegate: &'a Pubkey,
     mint: &'a Pubkey,
     source: Option<&'a Pubkey>,
-    amount: u64,
+    amount: U256,
     signers: SmallVec<[&'a Keypair; 1]>,
     owner: Option<Pubkey>,
     token_program_id: Option<&'a Pubkey>,
@@ -37,7 +38,7 @@ impl<'a> ApproveChecked<'a> {
         payer: &'a Keypair,
         delegate: &'a Pubkey,
         mint: &'a Pubkey,
-        amount: u64,
+        amount: U256,
     ) -> Self {
         ApproveChecked {
             svm,

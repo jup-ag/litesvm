@@ -41,7 +41,7 @@ solana-timings = "2.1"
 solana-vote-program = "2.1"
 spl-associated-token-account-client = "2.0"
 spl-token = "7.0.0"
-spl-token-2022 = "6.0.0"
+jpl-token-2022 = { git = "ssh://git@github.com/Jupnet/jupiter-program-library.git", branch = "2.1", package="spl-token-2022" }
 test-log = "0.2"
 thiserror = "1.0"
 tokio = "1.35"
