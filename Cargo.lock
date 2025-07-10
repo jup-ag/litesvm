@@ -2532,7 +2532,7 @@ dependencies = [
  "solana-instructions-sysvar",
  "solana-keypair",
  "solana-last-restart-slot",
- "solana-loader-v3-interface 3.0.0",
+ "solana-loader-v3-interface",
  "solana-loader-v4-interface",
  "solana-log-collector",
  "solana-measure",
@@ -2580,7 +2580,7 @@ dependencies = [
  "litesvm",
  "solana-instruction",
  "solana-keypair",
- "solana-loader-v3-interface 3.0.0",
+ "solana-loader-v3-interface",
  "solana-message",
  "solana-pubkey",
  "solana-signer",
@@ -4552,7 +4552,7 @@ dependencies = [
  "solana-hash",
  "solana-instruction",
  "solana-keccak-hasher",
- "solana-loader-v3-interface 5.0.0",
+ "solana-loader-v3-interface",
  "solana-loader-v4-interface",
  "solana-log-collector",
  "solana-measure",
@@ -5262,21 +5262,6 @@ dependencies = [
 
 [[package]]
 name = "solana-loader-v3-interface"
-version = "3.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fa4be76cfa9afd84ca2f35ebc09f0da0f0092935ccdac0595d98447f259538c2"
-dependencies = [
- "serde",
- "serde_bytes",
- "serde_derive",
- "solana-instruction",
- "solana-pubkey",
- "solana-sdk-ids",
- "solana-system-interface",
-]
-
-[[package]]
-name = "solana-loader-v3-interface"
 version = "5.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6f7162a05b8b0773156b443bccd674ea78bb9aa406325b467ea78c06c99a63a2"
@@ -5318,7 +5303,7 @@ dependencies = [
  "solana-bpf-loader-program",
  "solana-compute-budget",
  "solana-instruction",
- "solana-loader-v3-interface 5.0.0",
+ "solana-loader-v3-interface",
  "solana-loader-v4-interface",
  "solana-log-collector",
  "solana-measure",
@@ -5638,7 +5623,7 @@ dependencies = [
  "solana-keccak-hasher",
  "solana-last-restart-slot",
  "solana-loader-v2-interface",
- "solana-loader-v3-interface 5.0.0",
+ "solana-loader-v3-interface",
  "solana-loader-v4-interface",
  "solana-message",
  "solana-msg",
@@ -6111,7 +6096,7 @@ dependencies = [
  "solana-fee",
  "solana-inline-spl",
  "solana-lattice-hash",
- "solana-loader-v3-interface 5.0.0",
+ "solana-loader-v3-interface",
  "solana-loader-v4-interface",
  "solana-measure",
  "solana-metrics",
@@ -6613,7 +6598,7 @@ dependencies = [
  "solana-hash",
  "solana-instruction",
  "solana-instructions-sysvar",
- "solana-loader-v3-interface 5.0.0",
+ "solana-loader-v3-interface",
  "solana-loader-v4-interface",
  "solana-loader-v4-program",
  "solana-log-collector",
