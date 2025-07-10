@@ -271,6 +271,7 @@ use {
         },
         utils::{create_blockhash, rent::RentState},
     },
+    agave_feature_set::FeatureSet,
     agave_reserved_account_keys::ReservedAccountKeys,
     itertools::Itertools,
     log::error,
@@ -287,7 +288,6 @@ use {
     solana_compute_budget_instruction::instructions_processor::process_compute_budget_instructions,
     solana_epoch_rewards::EpochRewards,
     solana_epoch_schedule::EpochSchedule,
-    solana_feature_set::FeatureSet,
     solana_fee_structure::FeeStructure,
     solana_hash::Hash,
     solana_keypair::Keypair,
@@ -505,7 +505,7 @@ impl LiteSVM {
     #[cfg_attr(feature = "nodejs-internal", qualifiers(pub))]
     fn set_lamports(&mut self, lamports: u64) {
         self.accounts.add_account_no_checks(
-            Keypair::from_bytes(&self.airdrop_kp).unwrap().pubkey(),
+            Keypair::try_from(&self.airdrop_kp[..]).unwrap().pubkey(),
             AccountSharedData::new(lamports, 0, &system_program::id()),
         );
     }
@@ -618,7 +618,7 @@ impl LiteSVM {
 
     /// Airdrops the account with the lamports specified.
     pub fn airdrop(&mut self, pubkey: &Pubkey, lamports: u64) -> TransactionResult {
-        let payer = Keypair::from_bytes(&self.airdrop_kp).unwrap();
+        let payer = Keypair::try_from(&self.airdrop_kp[..]).unwrap();
         let tx = VersionedTransaction::try_new(
             VersionedMessage::Legacy(Message::new_with_blockhash(
                 &[solana_system_interface::instruction::transfer(
@@ -763,7 +763,17 @@ impl LiteSVM {
         let tx = self.sanitize_transaction_no_verify_inner(tx)?;
 
         tx.verify()?;
-        tx.verify_precompiles(&self.feature_set)?;
+        // Verify precompiles for each instruction
+        for instruction in tx.message().instructions().iter() {
+            let program_id = &tx.message().account_keys()[instruction.program_id_index as usize];
+            agave_precompiles::verify_if_precompile(
+                program_id,
+                instruction,
+                tx.message().instructions(),
+                &self.feature_set,
+            )
+            .map_err(|_| TransactionError::InvalidAccountIndex)?;
+        }
 
         Ok(tx)
     }
@@ -961,9 +971,9 @@ impl LiteSVM {
         for index in 0..tx.message().account_keys().len() {
             if tx.message().is_writable(index) {
                 let account = context
-                    .get_account_at_index(index as IndexOfAccount)
-                    .map_err(|err| TransactionError::InstructionError(index as u8, err))?
-                    .borrow();
+                    .accounts()
+                    .try_borrow(index as IndexOfAccount)
+                    .map_err(|err| TransactionError::InstructionError(index as u8, err))?;
                 let pubkey = context
                     .get_key_of_account_at_index(index as IndexOfAccount)
                     .map_err(|err| TransactionError::InstructionError(index as u8, err))?;
@@ -1379,11 +1389,11 @@ fn execute_tx_helper(
 
 fn get_compute_budget_limits(
     sanitized_tx: &SanitizedTransaction,
-    feature_set: &FeatureSet,
+    _feature_set: &FeatureSet,
 ) -> Result<ComputeBudgetLimits, ExecutionResult> {
     process_compute_budget_instructions(
         SVMMessage::program_instructions_iter(sanitized_tx),
-        feature_set,
+        &agave_feature_set::FeatureSet::all_enabled(),
     )
     .map_err(|e| ExecutionResult {
         tx_result: Err(e),

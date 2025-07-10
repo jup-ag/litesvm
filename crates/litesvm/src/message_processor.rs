@@ -1,10 +1,10 @@
 // copied from agave commit 8340ee60dd0184b17cfd319ea504079dfa636b62
 // with some execute_timings usage removed
 use {
+    agave_precompiles::get_precompile,
     solana_account::WritableAccount,
     solana_instructions_sysvar as instructions,
     solana_measure::measure_us,
-    solana_precompiles::get_precompile,
     solana_program_runtime::invoke_context::InvokeContext,
     solana_svm_transaction::svm_message::SVMMessage,
     solana_timings::ExecuteTimings,
@@ -38,9 +38,10 @@ pub(crate) fn process_message(
         {
             let mut mut_account_ref = invoke_context
                 .transaction_context
-                .get_account_at_index(account_index)
+                .accounts()
+                .try_borrow(account_index)
                 .map_err(|_| TransactionError::InvalidAccountIndex)?
-                .borrow_mut();
+                .clone();
             instructions::store_current_index(
                 mut_account_ref.data_as_mut_slice(),
                 instruction_index as u16,
